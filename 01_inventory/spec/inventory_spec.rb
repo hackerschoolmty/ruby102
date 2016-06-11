@@ -15,10 +15,11 @@ class Inventory
 end
 
 class Article
-  attr_reader :name
+  attr_reader :name, :code
 
   def initialize(data)
     @name = data[:name]
+    @code = data[:code]
   end
 end
 
