@@ -1,9 +1,41 @@
 require "rspec"
 
+class Inventory
+  def initialize(store)
+    @store = store
+  end
+
+  def articles_list
+    store.all_articles.map { |raw| Article.new(raw) }
+  end
+
+  private
+
+  attr_reader :store
+end
+
+class Article
+  attr_reader :name
+
+  def initialize(data)
+    @name = data[:name]
+  end
+end
+
+
 RSpec.describe "Inventory" do
   class FakeStore
     def initialize(records)
+      @records = records
     end
+
+    def all_articles
+      records
+    end
+
+    private
+
+    attr_reader :records
   end
 
   describe "shows the articles" do
