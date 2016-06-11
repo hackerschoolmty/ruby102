@@ -8,9 +8,10 @@ class Store
   end
 end
 
+store = Store.new
+inventory = Inventory.new(store)
+
 get '/' do
-  store = Store.new
-  inventory = Inventory.new(store)
   @articles = inventory.articles_list
   erb :index
 end
@@ -20,5 +21,6 @@ get '/articles/new' do
 end
 
 post '/articles' do
-  raise params.inspect
+  inventory.add_article(params)
+  redirect "/"
 end
