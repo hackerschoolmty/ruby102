@@ -18,3 +18,7 @@ end
 get '/articles/new' do
   erb :new_article
 end
+
+post '/articles' do
+  raise params.inspect
+end
