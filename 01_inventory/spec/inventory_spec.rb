@@ -54,7 +54,12 @@ RSpec.describe "Inventory" do
       expect(articles.map(&:code)).to eq ["c1", "g1"]
     end
 
-    it "with quantity"
+    it "with quantity" do
+      store = store_with([{quantity: 10}, {quantity: 35}])
+      inventory = Inventory.new(store)
+      articles = inventory.articles_list
+      expect(articles.map(&:quantity)).to eq [10, 35]
+    end
 
     def store_with(records)
       FakeStore.new(records)
