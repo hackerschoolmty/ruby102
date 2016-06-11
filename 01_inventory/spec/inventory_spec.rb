@@ -41,24 +41,26 @@ RSpec.describe "Inventory" do
   end
 
   describe "shows the articles" do
+    attr_reader :articles
+
+    before do
+      inventory = Inventory.new(store_with([
+        {name: "Camisa 1", code: "c1", quantity: 10},
+        {name: "Gorra 1", code: "g1", quantity: 35}
+      ]))
+
+      @articles = inventory.articles_list
+    end
+
     it "with name" do
-      store = store_with([{name: "Camisa 1"}, {name: "Gorra 1"}])
-      inventory = Inventory.new(store)
-      articles = inventory.articles_list
       expect(articles.map(&:name)).to eq ["Camisa 1", "Gorra 1"]
     end
 
     it "with code" do
-      store = store_with([{code: "c1"}, {code: "g1"}])
-      inventory = Inventory.new(store)
-      articles = inventory.articles_list
       expect(articles.map(&:code)).to eq ["c1", "g1"]
     end
 
     it "with quantity" do
-      store = store_with([{quantity: 10}, {quantity: 35}])
-      inventory = Inventory.new(store)
-      articles = inventory.articles_list
       expect(articles.map(&:quantity)).to eq [10, 35]
     end
 
