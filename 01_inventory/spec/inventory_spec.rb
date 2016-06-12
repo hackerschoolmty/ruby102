@@ -71,6 +71,15 @@ RSpec.describe "Inventory" do
           expect(store).not_to receive(:create).with(params)
           inventory.add_article(params)
         end
+
+        it "on error returns a form with the current values" do
+          params = good_params.merge("name" => blank)
+          status = inventory.add_article(params)
+          form = status.form_with_errors
+          expect(form.name).to eq blank
+          expect(form.code).to eq "c1"
+          expect(form.quantity).to eq 10
+        end
       end
     end
   end

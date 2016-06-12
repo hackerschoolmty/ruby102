@@ -12,39 +12,61 @@ class Inventory
   end
 
   def add_article(params)
-    if present? params["name"]
+    form = ArticleForm.new(params)
+
+    if form.valid?
       store.create(params)
-      AddArticleStatus.new(:success)
+      SuccessArticleStatus.new
     else
-      AddArticleStatus.new(:error)
+      ErrorArticleStatus.new(form)
     end
   end
 
   private
 
   attr_reader :store
-
-  def present?(attr)
-    !attr.nil? && attr != ""
-  end
 end
 
 class ArticleForm
   attr_reader :name, :code, :quantity
-end
 
-class AddArticleStatus
-  def initialize(status)
-    @status = status
+  def initialize(data = {})
+    @name = data["name"]
+    @code = data["code"]
+    self.quantity = data["quantity"]
   end
 
-  def success?
-    status == :success
+  def valid?
+    present?(name)
   end
 
   private
 
-  attr_reader :status
+  def present?(attr)
+    !attr.nil? && attr != ""
+  end
+
+  def quantity=(value)
+    @quantity = value.to_i if value
+  end
+end
+
+class ErrorArticleStatus
+  attr_reader :form_with_errors
+
+  def initialize(form)
+    @form_with_errors = form
+  end
+
+  def success?
+    false
+  end
+end
+
+class SuccessArticleStatus
+  def success?
+    true
+  end
 end
 
 class Article
