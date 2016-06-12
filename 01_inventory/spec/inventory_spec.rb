@@ -51,9 +51,10 @@ RSpec.describe "Inventory" do
       expect(status).to be_success
     end
 
-    it "has a new article form" do
+    it "has a new empty article form" do
       form = inventory.new_article_form
       expect(form.name).to be_nil
+      expect(form.name_errors).to be_nil
       expect(form.code).to be_nil
       expect(form.quantity).to be_nil
     end

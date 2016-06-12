@@ -41,7 +41,7 @@ class ArticleForm
   end
 
   def name_errors
-    "can't be blank"
+    "can't be blank" unless present? name
   end
 
   private
