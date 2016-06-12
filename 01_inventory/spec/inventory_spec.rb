@@ -54,6 +54,18 @@ RSpec.describe "Inventory" do
       status = inventory.add_article(params)
       expect(status).to be_success
     end
+
+    it "validates presence of name" do
+      store = store_with([])
+      inventory = Inventory.new(store)
+      params = {
+        "code" => "c1",
+        "quantity" => "10"
+      }
+
+      status = inventory.add_article(params)
+      expect(status).not_to be_success
+    end
   end
 
   def store_with(records)

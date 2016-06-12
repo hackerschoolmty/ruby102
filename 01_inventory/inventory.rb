@@ -9,7 +9,12 @@ class Inventory
 
   def add_article(params)
     store.create(params)
-    AddArticleStatus.new
+
+    if params["name"]
+      AddArticleStatus.new(:success)
+    else
+      AddArticleStatus.new(:error)
+    end
   end
 
   private
@@ -18,9 +23,17 @@ class Inventory
 end
 
 class AddArticleStatus
-  def success?
-    true
+  def initialize(status)
+    @status = status
   end
+
+  def success?
+    status == :success
+  end
+
+  private
+
+  attr_reader :status
 end
 
 class Article
