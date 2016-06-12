@@ -20,8 +20,8 @@ class Article
   attr_reader :name, :code, :quantity
 
   def initialize(data)
-    @name = data[:name]
-    @code = data[:code]
-    @quantity = data[:quantity]
+    @name = data["name"]
+    @code = data["code"]
+    @quantity = data["quantity"]
   end
 end

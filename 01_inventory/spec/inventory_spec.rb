@@ -21,8 +21,8 @@ RSpec.describe "Inventory" do
 
     before do
       inventory = Inventory.new(store_with([
-        {name: "Camisa 1", code: "c1", quantity: 10},
-        {name: "Gorra 1", code: "g1", quantity: 35}
+        {"name" => "Camisa 1", "code" => "c1", "quantity" => 10},
+        {"name" => "Gorra 1", "code" => "g1", "quantity" => 35}
       ]))
 
       @articles = inventory.articles_list
@@ -45,19 +45,15 @@ RSpec.describe "Inventory" do
     it "with name, code and quantity" do
       store = store_with([])
       inventory = Inventory.new(store)
-      expect(inventory.articles_list).to be_empty
-
-      expect(store).to receive(:create).with({
-        name: "Camisa 1",
-        code: "c1",
-        quantity: "10"
-      })
-
-      inventory.add_article({
+      params = {
         "name" => "Camisa 1",
         "code" => "c1",
         "quantity" => "10"
-      })
+      }
+
+      expect(inventory.articles_list).to be_empty
+      expect(store).to receive(:create).with(params)
+      inventory.add_article(params)
     end
   end
 
