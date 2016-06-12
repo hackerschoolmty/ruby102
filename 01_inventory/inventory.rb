@@ -1,4 +1,12 @@
+module Presence
+  def present?(attr)
+    !attr.nil? && attr != ""
+  end
+end
+
 class Inventory
+  include Presence
+
   def initialize(store)
     @store = store
   end
@@ -80,6 +88,10 @@ class ArticleForm
     errors[:code]
   end
 
+  def quantity_errors
+    errors[:quantity]
+  end
+
   private
 
   attr_reader :article, :errors
@@ -104,6 +116,8 @@ class SuccessArticleStatus
 end
 
 class Article
+  include Presence
+
   attr_reader :name, :code, :quantity
 
   def initialize(data = {})
@@ -115,6 +129,6 @@ class Article
   private
 
   def quantity=(value)
-    @quantity = value.to_i if value
+    @quantity = value.to_i if present?(value)
   end
 end
