@@ -106,6 +106,13 @@ RSpec.describe "Inventory" do
         expect(form.quantity_errors).to eq "can't be blank"
       end
     end
+
+    it "validates quantity is greater or equals than 0" do
+      params = good_params.merge("quantity" => -1)
+      status = inventory.add_article(params)
+      form = status.form_with_errors
+      expect(form.quantity_errors).to eq "should be greater or equals than 0"
+    end
   end
 
   def store_with(records)

@@ -48,7 +48,11 @@ class ArticleValidator
       errors[:code] = "can't be blank"
     end
 
-    unless present?(article.quantity)
+    if present?(article.quantity)
+      if article.quantity < 0
+        errors[:quantity] = "should be greater or equals than 0"
+      end
+    else
       errors[:quantity] = "can't be blank"
     end
 
