@@ -8,9 +8,8 @@ class Inventory
   end
 
   def add_article(params)
-    store.create(params)
-
     if params["name"]
+      store.create(params)
       AddArticleStatus.new(:success)
     else
       AddArticleStatus.new(:error)

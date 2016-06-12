@@ -29,42 +29,40 @@ RSpec.describe "Inventory" do
   end
 
   describe "adds article" do
-    it "with name, code and quantity" do
-      store = store_with([])
-      inventory = Inventory.new(store)
-      params = {
+    attr_reader :store, :inventory, :good_params
+
+    before do
+      @store = store_with([])
+      @inventory = Inventory.new(store)
+      @good_params = {
         "name" => "Camisa 1",
         "code" => "c1",
         "quantity" => "10"
       }
+    end
 
-      expect(store).to receive(:create).with(params)
-      inventory.add_article(params)
+    it "with name, code and quantity" do
+      expect(store).to receive(:create).with(good_params)
+      inventory.add_article(good_params)
     end
 
     it "returns success when params are good" do
-      store = store_with([])
-      inventory = Inventory.new(store)
-      params = {
-        "name" => "Camisa 1",
-        "code" => "c1",
-        "quantity" => "10"
-      }
-
-      status = inventory.add_article(params)
+      status = inventory.add_article(good_params)
       expect(status).to be_success
     end
 
-    it "validates presence of name" do
-      store = store_with([])
-      inventory = Inventory.new(store)
-      params = {
-        "code" => "c1",
-        "quantity" => "10"
-      }
+    describe "validates presence of name" do
+      it "on error does not return success" do
+        params = good_params.merge("name" => nil)
+        status = inventory.add_article(params)
+        expect(status).not_to be_success
+      end
 
-      status = inventory.add_article(params)
-      expect(status).not_to be_success
+      it "on error does not create the article" do
+        params = good_params.merge("name" => nil)
+        expect(store).not_to receive(:create).with(params)
+        inventory.add_article(params)
+      end
     end
   end
 
