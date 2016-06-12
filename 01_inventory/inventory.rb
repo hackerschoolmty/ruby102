@@ -7,6 +7,10 @@ class Inventory
     store.all_articles.map { |raw| Article.new(raw) }
   end
 
+  def add_article(params)
+    store.create(params)
+  end
+
   private
 
   attr_reader :store
