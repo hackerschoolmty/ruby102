@@ -59,35 +59,51 @@ RSpec.describe "Inventory" do
       expect(form.quantity).to be_nil
     end
 
-    describe "validates presence of name" do
-      [nil, ""].each do |blank|
-        it "on error does not return success" do
-          params = good_params.merge("name" => blank)
-          status = inventory.add_article(params)
-          expect(status).not_to be_success
-        end
+    it "on error does not return success" do
+      params = good_params.merge("name" => nil)
+      status = inventory.add_article(params)
+      expect(status).not_to be_success
+    end
 
-        it "on error does not create the article" do
-          params = good_params.merge("name" => blank)
-          expect(store).not_to receive(:create).with(params)
-          inventory.add_article(params)
-        end
+    it "on error does not create the article" do
+      params = good_params.merge("name" => nil)
+      expect(store).not_to receive(:create).with(params)
+      inventory.add_article(params)
+    end
 
-        it "on error returns a form with the current values" do
-          params = good_params.merge("name" => blank)
-          status = inventory.add_article(params)
-          form = status.form_with_errors
-          expect(form.name).to eq blank
-          expect(form.code).to eq "c1"
-          expect(form.quantity).to eq 10
-        end
+    it "on error returns a form with the current values" do
+      params = good_params.merge("name" => nil)
+      status = inventory.add_article(params)
+      form = status.form_with_errors
+      expect(form.name).to eq nil
+      expect(form.code).to eq "c1"
+      expect(form.quantity).to eq 10
+    end
 
-        it "on error returns a form with errors" do
-          params = good_params.merge("name" => blank)
-          status = inventory.add_article(params)
-          form = status.form_with_errors
-          expect(form.name_errors).to eq "can't be blank"
-        end
+    [nil, ""].each do |blank|
+      it "validates presence of name" do
+        params = good_params.merge("name" => blank)
+        status = inventory.add_article(params)
+        form = status.form_with_errors
+        expect(form.name_errors).to eq "can't be blank"
+      end
+    end
+
+    [nil, ""].each do |blank|
+      it "validates presence of code" do
+        params = good_params.merge("code" => blank)
+        status = inventory.add_article(params)
+        form = status.form_with_errors
+        expect(form.code_errors).to eq "can't be blank"
+      end
+    end
+
+    [nil, ""].each do |blank|
+      it "validates presence of quantity" do
+        params = good_params.merge("quantity" => blank)
+        status = inventory.add_article(params)
+        form = status.form_with_errors
+        expect(form.quantity_errors).to eq "can't be blank"
       end
     end
   end

@@ -28,11 +28,21 @@ class Inventory
   attr_reader :store
 
   def validate_article(article)
-    if present?(article.name)
-      {}
-    else
-      {name: "can't be blank"}
+    errors = {}
+
+    unless present?(article.name)
+      errors[:name] = "can't be blank"
     end
+
+    unless present?(article.code)
+      errors[:code] = "can't be blank"
+    end
+
+    unless present?(article.quantity)
+      errors[:quantity] = "can't be blank"
+    end
+
+    errors
   end
 
   def present?(attr)
@@ -64,6 +74,10 @@ class ArticleForm
 
   def name_errors
     errors[:name]
+  end
+
+  def code_errors
+    errors[:code]
   end
 
   private
