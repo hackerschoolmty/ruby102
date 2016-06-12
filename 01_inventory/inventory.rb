@@ -8,11 +8,11 @@ class Inventory
   end
 
   def new_article_form
-    ArticleForm.new
+    ArticleForm.new(Article.new)
   end
 
   def add_article(params)
-    form = ArticleForm.new(params)
+    form = ArticleForm.new(Article.new(params))
 
     if form.valid?
       store.create(params)
@@ -28,12 +28,20 @@ class Inventory
 end
 
 class ArticleForm
-  attr_reader :name, :code, :quantity
+  def initialize(article)
+    @article = article
+  end
 
-  def initialize(data = {})
-    @name = data["name"]
-    @code = data["code"]
-    self.quantity = data["quantity"]
+  def name
+    article.name
+  end
+
+  def code
+    article.code
+  end
+
+  def quantity
+    article.quantity
   end
 
   def valid?
@@ -46,12 +54,10 @@ class ArticleForm
 
   private
 
+  attr_reader :article
+
   def present?(attr)
     !attr.nil? && attr != ""
-  end
-
-  def quantity=(value)
-    @quantity = value.to_i if value
   end
 end
 
@@ -76,9 +82,15 @@ end
 class Article
   attr_reader :name, :code, :quantity
 
-  def initialize(data)
+  def initialize(data = {})
     @name = data["name"]
     @code = data["code"]
-    @quantity = data["quantity"]
+    self.quantity = data["quantity"]
+  end
+
+  private
+
+  def quantity=(value)
+    @quantity = value.to_i if value
   end
 end
