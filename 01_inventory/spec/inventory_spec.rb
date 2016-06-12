@@ -52,16 +52,18 @@ RSpec.describe "Inventory" do
     end
 
     describe "validates presence of name" do
-      it "on error does not return success" do
-        params = good_params.merge("name" => nil)
-        status = inventory.add_article(params)
-        expect(status).not_to be_success
-      end
+      [nil, ""].each do |blank|
+        it "on error does not return success" do
+          params = good_params.merge("name" => blank)
+          status = inventory.add_article(params)
+          expect(status).not_to be_success
+        end
 
-      it "on error does not create the article" do
-        params = good_params.merge("name" => nil)
-        expect(store).not_to receive(:create).with(params)
-        inventory.add_article(params)
+        it "on error does not create the article" do
+          params = good_params.merge("name" => blank)
+          expect(store).not_to receive(:create).with(params)
+          inventory.add_article(params)
+        end
       end
     end
   end

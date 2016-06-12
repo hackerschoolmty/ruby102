@@ -8,7 +8,7 @@ class Inventory
   end
 
   def add_article(params)
-    if params["name"]
+    if present? params["name"]
       store.create(params)
       AddArticleStatus.new(:success)
     else
@@ -19,6 +19,10 @@ class Inventory
   private
 
   attr_reader :store
+
+  def present?(attr)
+    !attr.nil? && attr != ""
+  end
 end
 
 class AddArticleStatus
