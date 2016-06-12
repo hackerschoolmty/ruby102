@@ -40,6 +40,10 @@ class ArticleForm
     present?(name)
   end
 
+  def name_errors
+    "can't be blank"
+  end
+
   private
 
   def present?(attr)

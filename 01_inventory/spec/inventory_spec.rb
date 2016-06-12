@@ -80,6 +80,13 @@ RSpec.describe "Inventory" do
           expect(form.code).to eq "c1"
           expect(form.quantity).to eq 10
         end
+
+        it "on error returns a form with errors" do
+          params = good_params.merge("name" => blank)
+          status = inventory.add_article(params)
+          form = status.form_with_errors
+          expect(form.name_errors).to eq "can't be blank"
+        end
       end
     end
   end
