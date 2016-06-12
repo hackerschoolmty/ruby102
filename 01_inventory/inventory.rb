@@ -1,12 +1,4 @@
-module Presence
-  def present?(attr)
-    !attr.nil? && attr != ""
-  end
-end
-
 class Inventory
-  include Presence
-
   def initialize(store)
     @store = store
   end
@@ -21,7 +13,7 @@ class Inventory
 
   def add_article(params)
     article = Article.new(params)
-    errors = validate_article(article)
+    errors = ArticleValidator.validate(article)
 
     if errors.empty?
       store.create(params)
@@ -34,8 +26,18 @@ class Inventory
   private
 
   attr_reader :store
+end
 
-  def validate_article(article)
+module Presence
+  def present?(attr)
+    !attr.nil? && attr != ""
+  end
+end
+
+class ArticleValidator
+  extend Presence
+
+  def self.validate(article)
     errors = {}
 
     unless present?(article.name)
@@ -51,10 +53,6 @@ class Inventory
     end
 
     errors
-  end
-
-  def present?(attr)
-    !attr.nil? && attr != ""
   end
 end
 
