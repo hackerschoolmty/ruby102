@@ -9,11 +9,18 @@ class Inventory
 
   def add_article(params)
     store.create(params)
+    AddArticleStatus.new
   end
 
   private
 
   attr_reader :store
+end
+
+class AddArticleStatus
+  def success?
+    true
+  end
 end
 
 class Article

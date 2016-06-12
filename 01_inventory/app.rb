@@ -20,6 +20,11 @@ get '/articles/new' do
 end
 
 post '/articles' do
-  inventory.add_article(params)
-  redirect "/"
+  status = inventory.add_article(params)
+
+  if status.success?
+    redirect "/"
+  else
+    erb :new_article
+  end
 end

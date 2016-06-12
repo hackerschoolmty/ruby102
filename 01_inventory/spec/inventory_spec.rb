@@ -38,9 +38,21 @@ RSpec.describe "Inventory" do
         "quantity" => "10"
       }
 
-      expect(inventory.articles_list).to be_empty
       expect(store).to receive(:create).with(params)
       inventory.add_article(params)
+    end
+
+    it "returns success when params are good" do
+      store = store_with([])
+      inventory = Inventory.new(store)
+      params = {
+        "name" => "Camisa 1",
+        "code" => "c1",
+        "quantity" => "10"
+      }
+
+      status = inventory.add_article(params)
+      expect(status).to be_success
     end
   end
 
