@@ -7,6 +7,10 @@ class Inventory
     store.all_articles.map { |raw| Article.new(raw) }
   end
 
+  def new_article_form
+    ArticleForm.new
+  end
+
   def add_article(params)
     if present? params["name"]
       store.create(params)
@@ -23,6 +27,10 @@ class Inventory
   def present?(attr)
     !attr.nil? && attr != ""
   end
+end
+
+class ArticleForm
+  attr_reader :name, :code, :quantity
 end
 
 class AddArticleStatus

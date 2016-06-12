@@ -51,6 +51,13 @@ RSpec.describe "Inventory" do
       expect(status).to be_success
     end
 
+    it "has a new article form" do
+      form = inventory.new_article_form
+      expect(form.name).to be_nil
+      expect(form.code).to be_nil
+      expect(form.quantity).to be_nil
+    end
+
     describe "validates presence of name" do
       [nil, ""].each do |blank|
         it "on error does not return success" do
