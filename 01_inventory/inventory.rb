@@ -44,9 +44,7 @@ class ArticleValidator
 
   def validate!
     self.errors = {}
-    validate_presence_of! :name
-    validate_presence_of! :code
-    validate_presence_of! :quantity
+    validate_presence_of! :name, :code, :quantity
     validate_uniqness_of_code!
     validate_quantity_is_greater_than_or_equals_than_zero!
     errors
@@ -57,9 +55,11 @@ class ArticleValidator
   attr_reader :article, :store
   attr_accessor :errors
 
-  def validate_presence_of!(attr_key)
-    unless present?(article.send(attr_key))
-      errors[attr_key] = "can't be blank"
+  def validate_presence_of!(*attr_keys)
+    attr_keys.each do |attr_key|
+      unless present?(article.send(attr_key))
+        errors[attr_key] = "can't be blank"
+      end
     end
   end
 
