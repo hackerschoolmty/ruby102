@@ -1,13 +1,8 @@
 require "sinatra"
 require_relative "inventory"
-require_relative "in_memory_store"
+require_relative "in_file_store"
 
-INITIAL_RECORDS = [
-  {"name" => "Camisa 1", "code" => "c1", "quantity" => 10},
-  {"name" => "Gorra 1", "code" => "g1", "quantity" => 35}
-]
-
-store = InMemoryStore.new(INITIAL_RECORDS)
+store = InFileStore.new
 inventory = Inventory.new(store)
 
 get '/' do
