@@ -30,3 +30,8 @@ post '/articles' do
     erb :new_article
   end
 end
+
+post '/articles/:code/increment' do
+  inventory.increment_article_quantity(params[:code])
+  redirect "/"
+end
