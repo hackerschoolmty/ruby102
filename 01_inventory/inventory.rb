@@ -18,7 +18,7 @@ class Inventory
     errors = ArticleValidator.new(article, store).validate!
 
     if errors.empty?
-      store.create(params)
+      store.create(article.to_h)
       SuccessArticleStatus.new
     else
       ErrorArticleStatus.new(ArticleForm.new(article, errors))
@@ -141,7 +141,9 @@ class Article
   end
 
   def to_h
-    {"name" => name, "code" => code, "quantity" => quantity}
+    {"name" => name,
+     "code" => code,
+     "quantity" => quantity}
   end
 
   def increment_quantity!

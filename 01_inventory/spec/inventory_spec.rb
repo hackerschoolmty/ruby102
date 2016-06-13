@@ -42,7 +42,7 @@ RSpec.describe "Inventory" do
     end
 
     it "with name, code and quantity" do
-      expect(store).to receive(:create).with(good_params)
+      expect(store).to receive(:create).with(good_params.merge("quantity" => 10))
       inventory.add_article(good_params)
     end
 
