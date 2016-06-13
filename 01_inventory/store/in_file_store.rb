@@ -53,6 +53,6 @@ class InFileStore
   end
 
   def file_path
-    "./in_file_store/data.yml"
+    "./store/in_file_store/data.yml"
   end
 end

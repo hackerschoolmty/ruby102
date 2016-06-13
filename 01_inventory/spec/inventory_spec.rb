@@ -1,6 +1,6 @@
 require "rspec"
-require_relative "../inventory"
-require_relative "../in_memory_store"
+require_relative "../lib/inventory"
+require_relative "../store/in_memory_store"
 
 RSpec.describe "Inventory" do
   describe "shows the articles" do

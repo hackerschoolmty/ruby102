@@ -1,6 +1,6 @@
 require "sinatra"
-require_relative "inventory"
-require_relative "in_file_store"
+require_relative "lib/inventory"
+require_relative "store/in_file_store"
 
 store = InFileStore.new
 inventory = Inventory.new(store)
