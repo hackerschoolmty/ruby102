@@ -82,6 +82,14 @@ class ArticleForm
     @errors = errors
   end
 
+  def self.delegate(*keys, to:)
+    keys.each do |key|
+      define_method key do
+        self.send(to).send(key)
+      end
+    end
+  end
+
   def self.delegate_from_article(*keys)
     keys.each do |key|
       define_method key do
@@ -98,7 +106,7 @@ class ArticleForm
     end
   end
 
-  delegate_from_article :name, :code, :quantity
+  delegate :name, :code, :quantity, to: :article
   delegate_from_errors :name, :code, :quantity
 
   private
