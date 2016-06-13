@@ -131,7 +131,7 @@ RSpec.describe "Inventory" do
     before do
       @store = store_with([
         {"name" => "Camisa 1", "code" => "c1", "quantity" => 10},
-        {"name" => "Gorra 1", "code" => "g1", "quantity" => 35}])
+        {"name" => "Gorra 1", "code" => "g1", "quantity" => 0}])
       @inventory = Inventory.new(store)
     end
 
@@ -153,6 +153,11 @@ RSpec.describe "Inventory" do
           "code" => "c1",
           "quantity" => 9})
       inventory.decrement_article_quantity("c1")
+    end
+
+    it "decrementing it (unless is 0)" do
+      expect(store).not_to receive(:update)
+      inventory.decrement_article_quantity("g1")
     end
   end
 
