@@ -44,9 +44,11 @@ class ArticleValidator
 
   def validate!
     self.errors = {}
-    validate_name!
-    validate_code!
-    validate_quantity!
+    validate_presence_of! :name
+    validate_presence_of! :code
+    validate_presence_of! :quantity
+    validate_uniqness_of_code!
+    validate_quantity_is_greater_than_or_equals_than_zero!
     errors
   end
 
@@ -55,29 +57,21 @@ class ArticleValidator
   attr_reader :article, :store
   attr_accessor :errors
 
-  def validate_name!
-    unless present?(article.name)
-      errors[:name] = "can't be blank"
+  def validate_presence_of!(attr_key)
+    unless present?(article.send(attr_key))
+      errors[attr_key] = "can't be blank"
     end
   end
 
-  def validate_code!
-    if present?(article.code)
-      if store.find_with_code(article.code)
-        errors[:code] = "already taken"
-      end
-    else
-      errors[:code] = "can't be blank"
+  def validate_uniqness_of_code!
+    if present?(article.code) && store.find_with_code(article.code)
+      errors[:code] = "already taken"
     end
   end
 
-  def validate_quantity!
-    if present?(article.quantity)
-      if article.quantity < 0
-        errors[:quantity] = "should be greater or equals than 0"
-      end
-    else
-      errors[:quantity] = "can't be blank"
+  def validate_quantity_is_greater_than_or_equals_than_zero!
+    if present?(article.quantity) && article.quantity < 0
+      errors[:quantity] = "should be greater or equals than 0"
     end
   end
 end
