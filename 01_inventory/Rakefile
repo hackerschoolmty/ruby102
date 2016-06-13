@@ -1,0 +1,10 @@
+require "active_record"
+require "active_support/all"
+
+namespace :db do
+  desc "migrate your database"
+  task :migrate do
+    require "./store/db_store/config"
+    ActiveRecord::Migrator.migrate('store/db_store/migrate')
+  end
+end

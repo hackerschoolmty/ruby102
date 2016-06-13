@@ -1,8 +1,9 @@
 require "sinatra"
 require_relative "lib/inventory"
-require_relative "store/in_file_store"
+require_relative "store/db_store/config"
+require_relative "store/db_store"
 
-store = InFileStore.new
+store = DbStore.new
 inventory = Inventory.new(store)
 
 get '/' do
@@ -34,4 +35,8 @@ end
 post '/articles/:code/decrement' do
   inventory.decrement_article_quantity(params[:code])
   redirect "/"
+end
+
+after do
+  ActiveRecord::Base.clear_active_connections!
 end
