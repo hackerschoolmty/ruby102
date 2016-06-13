@@ -11,6 +11,12 @@ class InMemoryStore
     records
   end
 
+  def find_with_code(code)
+    records.detect do |record|
+      record["code"] == code
+    end
+  end
+
   private
 
   attr_reader :records
