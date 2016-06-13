@@ -35,3 +35,8 @@ post '/articles/:code/increment' do
   inventory.increment_article_quantity(params[:code])
   redirect "/"
 end
+
+post '/articles/:code/decrement' do
+  inventory.decrement_article_quantity(params[:code])
+  redirect "/"
+end

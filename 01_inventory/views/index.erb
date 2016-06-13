@@ -1,3 +1,14 @@
+<style>
+  .article-actions {
+    max-width: 150px;
+    text-align: right;
+  }
+
+  .article-actions > form{
+    display: inline-block;
+  }
+</style>
+
 <div class="page-header">
   <h1>Artículos</h1>
 </div>
@@ -17,9 +28,13 @@
         <td><%= article.name %></td>
         <td><%= article.code %></td>
         <td><%= article.quantity %></td>
-        <td>
+        <td class="article-actions">
           <form action="/articles/<%= article.code %>/increment" method="POST">
             <button class="btn btn-default">Incrementar cantidad</button>
+          </form>
+
+          <form action="/articles/<%= article.code %>/decrement" method="POST">
+            <button class="btn btn-default">Decrementar cantidad</button>
           </form>
         </td>
       </tr>
