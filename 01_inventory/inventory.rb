@@ -1,3 +1,5 @@
+require "ostruct"
+
 class Inventory
   def initialize(store)
     @store = store
@@ -31,6 +33,17 @@ end
 module Presence
   def present?(attr)
     !attr.nil? && attr != ""
+  end
+end
+
+module Delegate
+  def delegate(*keys, to:, sufix: false)
+    keys.each do |key|
+      method_name = sufix && "#{key}_#{to}" || key
+      define_method method_name do
+        self.send(to).send(key)
+      end
+    end
   end
 end
 
@@ -77,37 +90,15 @@ class ArticleValidator
 end
 
 class ArticleForm
-  def initialize(article, errors = {})
-    @article = article
-    @errors = errors
-  end
-
-  def self.delegate(*keys, to:)
-    keys.each do |key|
-      define_method key do
-        self.send(to).send(key)
-      end
-    end
-  end
-
-  def self.delegate_from_article(*keys)
-    keys.each do |key|
-      define_method key do
-        article.send(key)
-      end
-    end
-  end
-
-  def self.delegate_from_errors(*keys)
-    keys.each do |key|
-      define_method "#{key}_errors" do
-        errors[key]
-      end
-    end
-  end
+  extend Delegate
 
   delegate :name, :code, :quantity, to: :article
-  delegate_from_errors :name, :code, :quantity
+  delegate :name, :code, :quantity, to: :errors, sufix: true
+
+  def initialize(article, errors = {})
+    @article = article
+    @errors = OpenStruct.new(errors)
+  end
 
   private
 
