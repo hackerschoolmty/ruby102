@@ -33,8 +33,11 @@ class Inventory
 
   def decrement_article_quantity(code)
     article = Article.new(store.find_with_code(code))
-    article.decrement_quantity!
-    store.update(article.to_h)
+
+    if article.quantity > 0
+      article.decrement_quantity!
+      store.update(article.to_h)
+    end
   end
 
   private
