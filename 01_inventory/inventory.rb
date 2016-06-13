@@ -13,7 +13,7 @@ class Inventory
 
   def add_article(params)
     article = Article.new(params)
-    errors = ArticleValidator.validate(article, store)
+    errors = ArticleValidator.new(article, store).validate!
 
     if errors.empty?
       store.create(params)
@@ -35,15 +35,33 @@ module Presence
 end
 
 class ArticleValidator
-  extend Presence
+  include Presence
 
-  def self.validate(article, store)
-    errors = {}
+  def initialize(article, store)
+    @store = store
+    @article = article
+  end
 
+  def validate!
+    self.errors = {}
+    validate_name!
+    validate_code!
+    validate_quantity!
+    errors
+  end
+
+  private
+
+  attr_reader :article, :store
+  attr_accessor :errors
+
+  def validate_name!
     unless present?(article.name)
       errors[:name] = "can't be blank"
     end
+  end
 
+  def validate_code!
     if present?(article.code)
       if store.find_with_code(article.code)
         errors[:code] = "already taken"
@@ -51,7 +69,9 @@ class ArticleValidator
     else
       errors[:code] = "can't be blank"
     end
+  end
 
+  def validate_quantity!
     if present?(article.quantity)
       if article.quantity < 0
         errors[:quantity] = "should be greater or equals than 0"
@@ -59,8 +79,6 @@ class ArticleValidator
     else
       errors[:quantity] = "can't be blank"
     end
-
-    errors
   end
 end
 
