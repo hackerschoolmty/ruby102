@@ -1,0 +1,43 @@
+<style>
+  .article-actions {
+    max-width: 150px;
+    text-align: right;
+  }
+
+  .article-actions > form{
+    display: inline-block;
+  }
+</style>
+
+<div class="page-header">
+  <h1>Artículos</h1>
+</div>
+<a href="/articles/new" class="btn btn-default pull-right">Agregar artículo</a>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Codigo</th>
+      <th>Cantidad</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @articles.each do |article| %>
+      <tr>
+        <td><%= article.name %></td>
+        <td><%= article.code %></td>
+        <td><%= article.quantity %></td>
+        <td class="article-actions">
+          <form action="/articles/<%= article.code %>/increment" method="POST">
+            <button class="btn btn-default">Incrementar cantidad</button>
+          </form>
+
+          <form action="/articles/<%= article.code %>/decrement" method="POST">
+            <button class="btn btn-default">Decrementar cantidad</button>
+          </form>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
