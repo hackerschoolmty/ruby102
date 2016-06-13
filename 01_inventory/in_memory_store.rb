@@ -7,6 +7,11 @@ class InMemoryStore
     records << record
   end
 
+  def update(record)
+    index = find_index(record)
+    records[index] = record
+  end
+
   def all_articles
     records
   end
@@ -20,4 +25,10 @@ class InMemoryStore
   private
 
   attr_reader :records
+
+  def find_index(record)
+    records.find_index do |current|
+      current["code"] == record["code"]
+    end
+  end
 end
