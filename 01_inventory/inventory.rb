@@ -31,6 +31,12 @@ class Inventory
     store.update(article.to_h)
   end
 
+  def decrement_article_quantity(code)
+    article = Article.new(store.find_with_code(code))
+    article.decrement_quantity!
+    store.update(article.to_h)
+  end
+
   private
 
   attr_reader :store
@@ -148,6 +154,10 @@ class Article
 
   def increment_quantity!
     self.quantity = quantity + 1
+  end
+
+  def decrement_quantity!
+    self.quantity = quantity - 1
   end
 
   private
