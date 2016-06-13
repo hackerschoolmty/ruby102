@@ -82,33 +82,24 @@ class ArticleForm
     @errors = errors
   end
 
-  def name
-    article.name
+  def self.delegate_from_article(*keys)
+    keys.each do |key|
+      define_method key do
+        article.send(key)
+      end
+    end
   end
 
-  def code
-    article.code
+  def self.delegate_from_errors(*keys)
+    keys.each do |key|
+      define_method "#{key}_errors" do
+        errors[key]
+      end
+    end
   end
 
-  def quantity
-    article.quantity
-  end
-
-  def valid?
-    present?(name)
-  end
-
-  def name_errors
-    errors[:name]
-  end
-
-  def code_errors
-    errors[:code]
-  end
-
-  def quantity_errors
-    errors[:quantity]
-  end
+  delegate_from_article :name, :code, :quantity
+  delegate_from_errors :name, :code, :quantity
 
   private
 
