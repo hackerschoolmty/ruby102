@@ -15,10 +15,11 @@ class Inventory
 end
 
 class Article
-  attr_reader :name
+  attr_reader :name, :code
 
   def initialize(record)
     @name = record[:name]
+    @code = record[:code]
   end
 end
 
@@ -45,7 +46,13 @@ RSpec.describe "Inventory" do
       expect(articles.map(&:name)).to eq ["Camisa 1", "Gorra 1"]
     end
 
-    it "with code"
+    it "with code" do
+      store = store_with([{code: "c1"}, {code: "g1"}])
+      inventory = Inventory.new(store)
+      articles = inventory.articles_list
+      expect(articles.map(&:code)).to eq ["c1", "g1"]
+    end
+
     it "with quantity"
 
     def store_with(records)
