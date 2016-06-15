@@ -15,3 +15,7 @@ get '/' do
   @articles = inventory.articles_list
   erb :index
 end
+
+get '/articles/new' do
+  erb :new_article
+end
