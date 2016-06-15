@@ -21,8 +21,8 @@ RSpec.describe "Inventory" do
 
     before do
       store = store_with([
-        {name: "Camisa 1", code: "c1", quantity: 1},
-        {name: "Gorra 1", code: "g1", quantity: 5}])
+        {"name" => "Camisa 1", "code" => "c1", "quantity" => 1},
+        {"name" => "Gorra 1", "code" => "g1", "quantity" => 5}])
       inventory = Inventory.new(store)
       @articles = inventory.articles_list
     end
@@ -38,9 +38,28 @@ RSpec.describe "Inventory" do
     it "with quantity" do
       expect(articles.map(&:quantity)).to eq [1, 5]
     end
+  end
 
-    def store_with(records)
-      FakeStore.new(records)
+  describe "adds article" do
+    it "with name, code and quantity" do
+      store = store_with([])
+      inventory = Inventory.new(store)
+
+      expect(store).to receive(:create).with({
+        "name" => "Camisa 1",
+        "code" => "c1",
+        "quantity" => "10"
+      })
+
+      inventory.add_article({
+        "name" => "Camisa 1",
+        "code" => "c1",
+        "quantity" => "10"
+      })
     end
+  end
+
+  def store_with(records)
+    FakeStore.new(records)
   end
 end
