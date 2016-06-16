@@ -1,21 +1,8 @@
 require "rspec"
 require_relative "../inventory"
+require_relative "../in_memory_store"
 
 RSpec.describe "Inventory" do
-  class FakeStore
-    def initialize(records)
-      @records = records
-    end
-
-    def all_articles
-      records
-    end
-
-    private
-
-    attr_reader :records
-  end
-
   describe "shows the articles" do
     attr_reader :articles
 
@@ -60,6 +47,6 @@ RSpec.describe "Inventory" do
   end
 
   def store_with(records)
-    FakeStore.new(records)
+    InMemoryStore.new(records)
   end
 end
