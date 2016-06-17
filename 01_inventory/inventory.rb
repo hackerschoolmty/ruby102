@@ -13,11 +13,12 @@ class Inventory
 
   def add_article(params)
     store.create(params)
+    form = ArticleForm.new(params)
 
     if present? params["name"]
-      Response.new(:success)
+      SuccessStatus.new
     else
-      Response.new(:error)
+      ErrorStatus.new(form)
     end
   end
 
@@ -33,25 +34,29 @@ end
 class ArticleForm
   attr_reader :name, :code, :quantity
 
-  def initialize
+  def initialize(params = {})
     @name = ""
-    @code = ""
-    @quantity = ""
+    @code = params["code"] || ""
+    @quantity = params["quantity"] || ""
   end
 end
 
-class Response
-  def initialize(status)
-    @status = status
+class SuccessStatus
+  def success?
+    true
+  end
+end
+
+class ErrorStatus
+  attr_reader :form_with_errors
+
+  def initialize(form)
+    @form_with_errors = form
   end
 
   def success?
-    status == :success
+    false
   end
-
-  private
-
-  attr_reader :status
 end
 
 class Article

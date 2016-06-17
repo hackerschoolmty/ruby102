@@ -68,6 +68,15 @@ RSpec.describe "Inventory" do
       status = inventory.add_article(bad_params)
       expect(status).not_to be_success
     end
+
+    it "on error returns a form with the current value" do
+      bad_params = good_params.merge("name" => "")
+      status = inventory.add_article(bad_params)
+      form = status.form_with_errors
+      expect(form.name).to eq ""
+      expect(form.code).to eq good_params["code"]
+      expect(form.quantity).to eq good_params["quantity"]
+    end
   end
 
   def store_with(records)
