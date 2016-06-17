@@ -16,6 +16,7 @@ get '/' do
 end
 
 get '/articles/new' do
+  @form = inventory.new_article_form
   erb :new_article
 end
 
@@ -25,6 +26,7 @@ post '/articles' do
   if status.success?
     redirect "/"
   else
+    @form = status.form_with_errors
     erb :new_article
   end
 end
