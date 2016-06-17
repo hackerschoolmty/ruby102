@@ -69,6 +69,12 @@ RSpec.describe "Inventory" do
       expect(status).not_to be_success
     end
 
+    it "on error does not create the article" do
+      bad_params = good_params.merge("name" => "")
+      expect(store).not_to receive(:create)
+      inventory.add_article(bad_params)
+    end
+
     it "on error returns a form with the current value" do
       bad_params = good_params.merge("name" => "")
       status = inventory.add_article(bad_params)

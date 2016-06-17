@@ -12,10 +12,10 @@ class Inventory
   end
 
   def add_article(params)
-    store.create(params)
     form = ArticleForm.new(params)
 
     if present? params["name"]
+      store.create(params)
       SuccessStatus.new
     else
       ErrorStatus.new(form)
