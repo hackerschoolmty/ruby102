@@ -7,6 +7,10 @@ class Inventory
     store.all_articles.map { |record| Article.new(record) }
   end
 
+  def new_article_form
+    ArticleForm.new
+  end
+
   def add_article(params)
     store.create(params)
 
@@ -23,6 +27,16 @@ class Inventory
 
   def present?(value)
     !value.nil? && !value.empty?
+  end
+end
+
+class ArticleForm
+  attr_reader :name, :code, :quantity
+
+  def initialize
+    @name = ""
+    @code = ""
+    @quantity = ""
   end
 end
 

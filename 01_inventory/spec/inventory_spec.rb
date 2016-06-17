@@ -40,6 +40,13 @@ RSpec.describe "Inventory" do
       }
     end
 
+    it "has a new article form" do
+      form = inventory.new_article_form
+      expect(form.name).to eq ""
+      expect(form.code).to eq ""
+      expect(form.quantity).to eq ""
+    end
+
     it "with name, code and quantity" do
       expect(store).to receive(:create).with(good_params)
       inventory.add_article(good_params)
