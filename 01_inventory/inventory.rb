@@ -39,6 +39,14 @@ class ArticleForm
     @code = params["code"] || ""
     @quantity = params["quantity"] || ""
   end
+
+  def has_name_errors?
+    true
+  end
+
+  def name_errors
+    "no puede estar en blanco"
+  end
 end
 
 class SuccessStatus
