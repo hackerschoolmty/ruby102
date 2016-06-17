@@ -44,6 +44,18 @@ RSpec.describe "Inventory" do
         "quantity" => "10"
       })
     end
+
+    it "returns success when params are good" do
+      store = store_with([])
+      inventory = Inventory.new(store)
+      status = inventory.add_article({
+        "name" => "Camisa 1",
+        "code" => "c1",
+        "quantity" => "10"
+      })
+
+      expect(status).to be_succes
+    end
   end
 
   def store_with(records)
