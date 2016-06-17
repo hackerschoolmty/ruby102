@@ -28,56 +28,37 @@ RSpec.describe "Inventory" do
   end
 
   describe "adds article" do
+    attr_reader :store, :inventory, :good_params
+
+    before do
+      @store = store_with([])
+      @inventory = Inventory.new(store)
+      @good_params = {
+        "name" => "Camisa 1",
+        "code" => "c1",
+        "quantity" => "10"
+      }
+    end
+
     it "with name, code and quantity" do
-      store = store_with([])
-      inventory = Inventory.new(store)
-
-      expect(store).to receive(:create).with({
-        "name" => "Camisa 1",
-        "code" => "c1",
-        "quantity" => "10"
-      })
-
-      inventory.add_article({
-        "name" => "Camisa 1",
-        "code" => "c1",
-        "quantity" => "10"
-      })
+      expect(store).to receive(:create).with(good_params)
+      inventory.add_article(good_params)
     end
 
     it "returns success when params are good" do
-      store = store_with([])
-      inventory = Inventory.new(store)
-      status = inventory.add_article({
-        "name" => "Camisa 1",
-        "code" => "c1",
-        "quantity" => "10"
-      })
-
-      expect(status).to be_succes
+      status = inventory.add_article(good_params)
+      expect(status).to be_success
     end
 
     it "returns not success when name is not present (nil)" do
-      store = store_with([])
-      inventory = Inventory.new(store)
-      status = inventory.add_article({
-        "name" => nil,
-        "code" => "c1",
-        "quantity" => "10"
-      })
-
+      bad_params = good_params.merge("name" => nil)
+      status = inventory.add_article(bad_params)
       expect(status).not_to be_success
     end
 
     it "returns not success when name is not present (empty)" do
-      store = store_with([])
-      inventory = Inventory.new(store)
-      status = inventory.add_article({
-        "name" => "",
-        "code" => "c1",
-        "quantity" => "10"
-      })
-
+      bad_params = good_params.merge("name" => "")
+      status = inventory.add_article(bad_params)
       expect(status).not_to be_success
     end
   end
