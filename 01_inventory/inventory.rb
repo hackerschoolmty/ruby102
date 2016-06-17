@@ -9,18 +9,35 @@ class Inventory
 
   def add_article(params)
     store.create(params)
-    SuccessStatus.new
+
+    if present? params["name"]
+      Response.new(:success)
+    else
+      Response.new(:error)
+    end
   end
 
   private
 
   attr_reader :store
+
+  def present?(value)
+    !value.nil? && !value.empty?
+  end
 end
 
-class SuccessStatus
-  def success?
-    true
+class Response
+  def initialize(status)
+    @status = status
   end
+
+  def success?
+    status == :success
+  end
+
+  private
+
+  attr_reader :status
 end
 
 class Article

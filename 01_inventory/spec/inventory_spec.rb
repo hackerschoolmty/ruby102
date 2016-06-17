@@ -56,6 +56,30 @@ RSpec.describe "Inventory" do
 
       expect(status).to be_succes
     end
+
+    it "returns not success when name is not present (nil)" do
+      store = store_with([])
+      inventory = Inventory.new(store)
+      status = inventory.add_article({
+        "name" => nil,
+        "code" => "c1",
+        "quantity" => "10"
+      })
+
+      expect(status).not_to be_success
+    end
+
+    it "returns not success when name is not present (empty)" do
+      store = store_with([])
+      inventory = Inventory.new(store)
+      status = inventory.add_article({
+        "name" => "",
+        "code" => "c1",
+        "quantity" => "10"
+      })
+
+      expect(status).not_to be_success
+    end
   end
 
   def store_with(records)
