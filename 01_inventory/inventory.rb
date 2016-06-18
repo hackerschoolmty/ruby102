@@ -12,13 +12,14 @@ class Inventory
   end
 
   def add_article(params)
-    form = ArticleForm.new(Article.new(params))
+    article = Article.new(params)
+    errors = validate_article(article)
 
-    if present? params["name"]
+    if errors.empty?
       store.create(params)
       SuccessStatus.new
     else
-      ErrorStatus.new(form)
+      ErrorStatus.new(ArticleForm.new(article, errors))
     end
   end
 
@@ -29,24 +30,41 @@ class Inventory
   def present?(value)
     !value.nil? && !value.empty?
   end
+
+  def validate_article(article)
+    if present? article.name
+      {}
+    else
+      {name: "no puede estar en blanco"}
+    end
+  end
 end
 
 class ArticleForm
   attr_reader :name, :code, :quantity
 
-  def initialize(article)
+  def initialize(article, errors = {})
     @name = article.name || ""
     @code = article.code || ""
     @quantity = article.quantity || ""
+    @errors = errors
   end
 
   def has_name_errors?
-    true
+    errors.size > 0
   end
 
   def name_errors
-    "no puede estar en blanco"
+    if has_name_errors?
+      "no puede estar en blanco"
+    else
+      ""
+    end
   end
+
+  private
+
+  attr_reader :errors
 end
 
 class SuccessStatus
