@@ -24,7 +24,7 @@
       </div>
       <div class="form-group <%= "has-error" if @form.has_quantity_errors? %>">
         <label for="quantity">Cantidad</label>
-        <input type="text" class="form-control" name="quantity" id="quantity" value="<%= @form.quantity %>">
+        <input type="number" class="form-control" name="quantity" id="quantity" value="<%= @form.quantity %>">
         <% if @form.has_quantity_errors? %>
           <span class="help-block"><%= @form.quantity_errors %></span>
         <% end %>

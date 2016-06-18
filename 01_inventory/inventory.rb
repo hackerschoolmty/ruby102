@@ -1,6 +1,9 @@
 module Presence
   def present?(value)
-    !value.nil? && !value.empty?
+    case value
+    when String then !value.empty?
+    else !value.nil?
+    end
   end
 end
 
@@ -48,7 +51,11 @@ class ArticleValidator
       errors[:code] = "no puede estar en blanco"
     end
 
-    unless present? article.quantity
+    if present? article.quantity
+      if article.quantity < 0
+        errors[:quantity] = "debe ser mayor o igual a 0"
+      end
+    else
       errors[:quantity] = "no puede estar en blanco"
     end
 
@@ -61,9 +68,9 @@ class ArticleForm
   attr_reader :name, :code, :quantity
 
   def initialize(article, errors = {})
-    @name = article.name || ""
-    @code = article.code || ""
-    @quantity = article.quantity || ""
+    @name = article.name.to_s
+    @code = article.code.to_s
+    @quantity = article.quantity.to_s
     @errors = errors
   end
 
@@ -115,11 +122,20 @@ class ErrorStatus
 end
 
 class Article
+  include Presence
   attr_reader :name, :code, :quantity
 
   def initialize(record = {})
     @name = record["name"]
     @code = record["code"]
-    @quantity = record["quantity"]
+    self.quantity = record["quantity"]
+  end
+
+  private
+
+  def quantity=(value)
+    if present? value
+      @quantity = value.to_i
+    end
   end
 end
