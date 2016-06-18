@@ -1,4 +1,12 @@
+module Presence
+  def present?(value)
+    !value.nil? && !value.empty?
+  end
+end
+
 class Inventory
+  include Presence
+
   def initialize(store)
     @store = store
   end
@@ -27,10 +35,6 @@ class Inventory
 
   attr_reader :store
 
-  def present?(value)
-    !value.nil? && !value.empty?
-  end
-
   def validate_article(article)
     errors = {}
 
@@ -51,6 +55,7 @@ class Inventory
 end
 
 class ArticleForm
+  include Presence
   attr_reader :name, :code, :quantity
 
   def initialize(article, errors = {})
@@ -61,15 +66,15 @@ class ArticleForm
   end
 
   def has_name_errors?
-    name_errors.size > 0
+    present? name_errors
   end
 
   def has_code_errors?
-    code_errors.size > 0
+    present? code_errors
   end
 
   def has_quantity_errors?
-    quantity_errors.size > 0
+    present? quantity_errors
   end
 
   def code_errors
