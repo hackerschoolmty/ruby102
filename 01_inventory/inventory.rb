@@ -8,11 +8,11 @@ class Inventory
   end
 
   def new_article_form
-    ArticleForm.new
+    ArticleForm.new(Article.new)
   end
 
   def add_article(params)
-    form = ArticleForm.new(params)
+    form = ArticleForm.new(Article.new(params))
 
     if present? params["name"]
       store.create(params)
@@ -34,10 +34,10 @@ end
 class ArticleForm
   attr_reader :name, :code, :quantity
 
-  def initialize(params = {})
-    @name = ""
-    @code = params["code"] || ""
-    @quantity = params["quantity"] || ""
+  def initialize(article)
+    @name = article.name || ""
+    @code = article.code || ""
+    @quantity = article.quantity || ""
   end
 
   def has_name_errors?
@@ -70,7 +70,7 @@ end
 class Article
   attr_reader :name, :code, :quantity
 
-  def initialize(record)
+  def initialize(record = {})
     @name = record["name"]
     @code = record["code"]
     @quantity = record["quantity"]
