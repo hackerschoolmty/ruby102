@@ -51,6 +51,9 @@ RSpec.describe "Inventory" do
       form = inventory.new_article_form
       expect(form).not_to have_name_errors
       expect(form.name_errors).to eq ""
+
+      expect(form).not_to have_quantity_errors
+      expect(form.quantity_errors).to eq ""
     end
 
     it "with name, code and quantity" do
@@ -90,12 +93,22 @@ RSpec.describe "Inventory" do
       expect(form.quantity).to eq good_params["quantity"]
     end
 
-    it "on error returns a form with errors" do
+    it "validates presences of name" do
       bad_params = good_params.merge("name" => "")
       status = inventory.add_article(bad_params)
       form = status.form_with_errors
       expect(form).to have_name_errors
+      expect(form).not_to have_quantity_errors
       expect(form.name_errors).to eq "no puede estar en blanco"
+    end
+
+    it "validates presences of quantity" do
+      bad_params = good_params.merge("quantity" => "")
+      status = inventory.add_article(bad_params)
+      form = status.form_with_errors
+      expect(form).to have_quantity_errors
+      expect(form).not_to have_name_errors
+      expect(form.quantity_errors).to eq "no puede estar en blanco"
     end
   end
 

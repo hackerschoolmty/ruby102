@@ -32,11 +32,17 @@ class Inventory
   end
 
   def validate_article(article)
-    if present? article.name
-      {}
-    else
-      {name: "no puede estar en blanco"}
+    errors = {}
+
+    unless present? article.name
+      errors[:name] = "no puede estar en blanco"
     end
+
+    unless present? article.quantity
+      errors[:quantity] = "no puede estar en blanco"
+    end
+
+    errors
   end
 end
 
@@ -51,15 +57,19 @@ class ArticleForm
   end
 
   def has_name_errors?
-    errors.size > 0
+    name_errors.size > 0
+  end
+
+  def has_quantity_errors?
+    quantity_errors.size > 0
+  end
+
+  def quantity_errors
+    errors[:quantity] || ""
   end
 
   def name_errors
-    if has_name_errors?
-      "no puede estar en blanco"
-    else
-      ""
-    end
+    errors[:name] || ""
   end
 
   private
