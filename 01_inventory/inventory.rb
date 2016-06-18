@@ -22,7 +22,7 @@ class Inventory
 
   def add_article(params)
     article = Article.new(params)
-    errors = ArticleValidator.validate(article, store)
+    errors = ArticleValidator.new(article, store).validate!
 
     if errors.empty?
       store.create(params)
@@ -38,32 +38,43 @@ class Inventory
 end
 
 class ArticleValidator
-  extend Presence
+  include Presence
 
-  def self.validate(article, store)
-    errors = {}
+  def initialize(article, store)
+    @article = article
+    @store = store
+    @errors = {}
+  end
 
-    unless present? article.name
-      errors[:name] = "no puede estar en blanco"
-    end
+  def validate!
+    validate_presence_of! :name, :code, :quantity
+    validate_uniqueness_of_code!
+    validate_quantity_is_greater_or_equals_than_zero!
+    errors
+  end
 
-    unless present? article.code
-      errors[:code] = "no puede estar en blanco"
-    end
+  private
 
+  attr_reader :article, :store, :errors
+
+  def validate_uniqueness_of_code!
     if store.find_with_code(article.code)
       errors[:code] = "ya esta tomado"
     end
+  end
 
-    if present? article.quantity
-      if article.quantity < 0
-        errors[:quantity] = "debe ser mayor o igual a 0"
-      end
-    else
-      errors[:quantity] = "no puede estar en blanco"
+  def validate_quantity_is_greater_or_equals_than_zero!
+    if present?(article.quantity) && article.quantity < 0
+      errors[:quantity] = "debe ser mayor o igual a 0"
     end
+  end
 
-    errors
+  def validate_presence_of!(*attr_keys)
+    attr_keys.map do |attr_key|
+      unless present? article.send(attr_key)
+        errors[attr_key] = "no puede estar en blanco"
+      end
+    end
   end
 end
 
