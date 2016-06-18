@@ -8,6 +8,7 @@
       <th>Nombre</th>
       <th>Codigo</th>
       <th>Cantidad</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -16,6 +17,11 @@
         <td><%= article.name %></td>
         <td><%= article.code %></td>
         <td><%= article.quantity %></td>
+        <td>
+          <form action="/articles/<%= article.code %>/increment" method="POST">
+            <button class="btn btn-default">Incrementar cantidad</button>
+          </form>
+        </td>
       </tr>
     <% end %>
   </tbody>

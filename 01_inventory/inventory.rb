@@ -32,6 +32,12 @@ class Inventory
     end
   end
 
+  def increment_article_quantity(code)
+    article = Article.new(store.find_with_code(code))
+    article.increment_quantity!
+    store.update(article.to_record)
+  end
+
   private
 
   attr_reader :store
@@ -143,6 +149,16 @@ class Article
     @name = record["name"]
     @code = record["code"]
     self.quantity = record["quantity"]
+  end
+
+  def increment_quantity!
+    self.quantity = quantity + 1
+  end
+
+  def to_record
+    {"name" => name,
+     "code"=> code,
+     "quantity"=> quantity}
   end
 
   private

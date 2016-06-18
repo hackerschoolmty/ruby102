@@ -147,6 +147,37 @@ RSpec.describe "Inventory" do
     end
   end
 
+  describe "increments article quantity" do
+    attr_reader :store, :inventory
+
+    before do
+      @store = store_with([
+        {"name" => "Camisa 1", "code" => "c1", "quantity" => 1},
+        {"name" => "Gorra 1", "code" => "g1", "quantity" => 5}])
+      @inventory = Inventory.new(store)
+    end
+
+    example do
+      expect(store).to receive(:update).with({
+        "name" => "Camisa 1",
+        "code" => "c1",
+        "quantity" => 2
+      })
+
+      inventory.increment_article_quantity("c1")
+    end
+
+    example do
+      expect(store).to receive(:update).with({
+        "name" => "Gorra 1",
+        "code" => "g1",
+        "quantity" => 6
+      })
+
+      inventory.increment_article_quantity("g1")
+    end
+  end
+
   def store_with(records)
     InMemoryStore.new(records)
   end
