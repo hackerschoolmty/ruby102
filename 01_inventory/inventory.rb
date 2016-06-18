@@ -22,7 +22,7 @@ class Inventory
 
   def add_article(params)
     article = Article.new(params)
-    errors = ArticleValidator.validate(article)
+    errors = ArticleValidator.validate(article, store)
 
     if errors.empty?
       store.create(params)
@@ -40,7 +40,7 @@ end
 class ArticleValidator
   extend Presence
 
-  def self.validate(article)
+  def self.validate(article, store)
     errors = {}
 
     unless present? article.name
@@ -49,6 +49,13 @@ class ArticleValidator
 
     unless present? article.code
       errors[:code] = "no puede estar en blanco"
+    end
+
+    store.all_articles.each do |record|
+      if record["code"] == article.code
+        errors[:code] = "ya esta tomado"
+        break
+      end
     end
 
     if present? article.quantity

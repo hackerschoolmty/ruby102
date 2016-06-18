@@ -133,6 +133,18 @@ RSpec.describe "Inventory" do
       expect(form).to have_quantity_errors
       expect(form.quantity_errors).to eq "debe ser mayor o igual a 0"
     end
+
+    it "validates uniqueness of code" do
+      store = store_with([{"name" => "Camisa 1", "code" => "c1", "quantity" => 1}])
+      inventory = Inventory.new(store)
+      params = good_params.merge("code" => "c1")
+
+      status = inventory.add_article(params)
+      form = status.form_with_errors
+
+      expect(form).to have_code_errors
+      expect(form.code_errors).to eq "ya esta tomado"
+    end
   end
 
   def store_with(records)
