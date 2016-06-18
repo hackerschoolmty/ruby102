@@ -38,6 +38,10 @@ class Inventory
       errors[:name] = "no puede estar en blanco"
     end
 
+    unless present? article.code
+      errors[:code] = "no puede estar en blanco"
+    end
+
     unless present? article.quantity
       errors[:quantity] = "no puede estar en blanco"
     end
@@ -60,8 +64,16 @@ class ArticleForm
     name_errors.size > 0
   end
 
+  def has_code_errors?
+    code_errors.size > 0
+  end
+
   def has_quantity_errors?
     quantity_errors.size > 0
+  end
+
+  def code_errors
+    errors[:code] || ""
   end
 
   def quantity_errors

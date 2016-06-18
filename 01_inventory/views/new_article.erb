@@ -15,9 +15,12 @@
           <span class="help-block"><%= @form.name_errors %></span>
         <% end %>
       </div>
-      <div class="form-group">
+      <div class="form-group <%= "has-error" if @form.has_code_errors? %>">
         <label for="code">Código</label>
         <input type="text" class="form-control" name="code" id="code" value="<%= @form.code %>">
+        <% if @form.has_code_errors? %>
+          <span class="help-block"><%= @form.code_errors %></span>
+        <% end %>
       </div>
       <div class="form-group <%= "has-error" if @form.has_quantity_errors? %>">
         <label for="quantity">Cantidad</label>

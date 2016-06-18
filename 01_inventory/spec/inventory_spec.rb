@@ -52,6 +52,9 @@ RSpec.describe "Inventory" do
       expect(form).not_to have_name_errors
       expect(form.name_errors).to eq ""
 
+      expect(form).not_to have_code_errors
+      expect(form.code_errors).to eq ""
+
       expect(form).not_to have_quantity_errors
       expect(form.quantity_errors).to eq ""
     end
@@ -98,8 +101,19 @@ RSpec.describe "Inventory" do
       status = inventory.add_article(bad_params)
       form = status.form_with_errors
       expect(form).to have_name_errors
+      expect(form).not_to have_code_errors
       expect(form).not_to have_quantity_errors
       expect(form.name_errors).to eq "no puede estar en blanco"
+    end
+
+    it "validates presences of code" do
+      bad_params = good_params.merge("code" => "")
+      status = inventory.add_article(bad_params)
+      form = status.form_with_errors
+      expect(form).to have_code_errors
+      expect(form).not_to have_name_errors
+      expect(form).not_to have_quantity_errors
+      expect(form.code_errors).to eq "no puede estar en blanco"
     end
 
     it "validates presences of quantity" do
@@ -108,6 +122,7 @@ RSpec.describe "Inventory" do
       form = status.form_with_errors
       expect(form).to have_quantity_errors
       expect(form).not_to have_name_errors
+      expect(form).not_to have_code_errors
       expect(form.quantity_errors).to eq "no puede estar en blanco"
     end
   end
