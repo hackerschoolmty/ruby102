@@ -51,11 +51,8 @@ class ArticleValidator
       errors[:code] = "no puede estar en blanco"
     end
 
-    store.all_articles.each do |record|
-      if record["code"] == article.code
-        errors[:code] = "ya esta tomado"
-        break
-      end
+    if store.find_with_code(article.code)
+      errors[:code] = "ya esta tomado"
     end
 
     if present? article.quantity
