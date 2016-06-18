@@ -78,44 +78,43 @@ class ArticleValidator
   end
 end
 
+module Form
+  def has_errors_for(*attr_keys)
+    attr_keys.each do |attr_key|
+      define_method "#{attr_key}_errors" do
+        errors[attr_key] || ""
+      end
+
+      define_method "has_#{attr_key}_errors?" do
+        present? send("#{attr_key}_errors")
+      end
+    end
+  end
+
+  def has_fields(*attr_keys, source:)
+    attr_keys.each do |attr_key|
+      define_method attr_key do
+        send(source).send(attr_key).to_s
+      end
+    end
+  end
+end
+
 class ArticleForm
   include Presence
-  attr_reader :name, :code, :quantity
+  extend Form
 
   def initialize(article, errors = {})
-    @name = article.name.to_s
-    @code = article.code.to_s
-    @quantity = article.quantity.to_s
+    @article = article
     @errors = errors
   end
 
-  def has_name_errors?
-    present? name_errors
-  end
-
-  def has_code_errors?
-    present? code_errors
-  end
-
-  def has_quantity_errors?
-    present? quantity_errors
-  end
-
-  def code_errors
-    errors[:code] || ""
-  end
-
-  def quantity_errors
-    errors[:quantity] || ""
-  end
-
-  def name_errors
-    errors[:name] || ""
-  end
+  has_fields :name, :code, :quantity, source: :article
+  has_errors_for :name, :code, :quantity
 
   private
 
-  attr_reader :errors
+  attr_reader :errors, :article
 end
 
 class SuccessStatus
